@@ -1,5 +1,7 @@
 const express = require('express')
 const checklistRouter = require('./src/routes/checklist')
+require('./config/database')
+
 const app = express()
 
 //middleware para utilização de json
