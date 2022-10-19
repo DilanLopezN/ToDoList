@@ -6,9 +6,14 @@ const router = express.Router()
 const Checklist = require('../models/checklist')
 
 // rota get padrão
-router.get('/', (req, res) => {
-  console.log('rota get')
-  res.send(req.body)
+router.get('/', async (req, res) => {
+  try {
+    let checklists = await Checklist.find({})
+
+    res.status(200).render('checklists/index', { checklists: checklists })
+  } catch (error) {
+    res.status(200).render('pages/error', { error: 'Erro ao exibir listas' })
+  }
 })
 
 // rota post
@@ -25,10 +30,13 @@ router.post('/', async (req, res) => {
 //rota get com param
 router.get('/:id', async (req, res) => {
   try {
-    console.log(req.params.id)
-    res.send(`id: ${req.params.id}`)
+    let checklists = await Checklist.findById(req.params.id)
+
+    res.status(200).render('checklists/show', { checklist: checklists })
   } catch (error) {
-    res.status(422).json(error)
+    res
+      .status(200)
+      .render('pages/error', { error: 'Erro ao exibir lista de tarefas' })
   }
 })
 
