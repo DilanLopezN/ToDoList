@@ -23,20 +23,37 @@ router.post('/', async (req, res) => {
 })
 
 //rota get com param
-router.get('/:id', (req, res) => {
-  console.log(req.params.id)
-  res.send(`id: ${req.params.id}`)
+router.get('/:id', async (req, res) => {
+  try {
+    console.log(req.params.id)
+    res.send(`id: ${req.params.id}`)
+  } catch (error) {
+    res.status(422).json(error)
+  }
 })
 
 //rota put
-router.put('/:id', (req, res) => {
-  console.log(req.params.id)
-  res.send(`put id: ${req.params.id}`)
+router.put('/:id', async (req, res) => {
+  let { name } = req.body
+  try {
+    let checklist = await Checklist.findByIdAndUpdate(
+      req.params.id,
+      { name },
+      { new: True }
+    )
+    res.status(200).json(checklist)
+  } catch (error) {
+    res.status(422).json(error)
+  }
 })
 
-router.delete('/:id', (req, res) => {
-  console.log(req.params.id)
-  res.send(`delete id: ${req.params.id}`)
+router.delete('/:id', async (req, res) => {
+  try {
+    let checklist = await Checklist.findByIdAndRemove(req.params.id)
+    res.status(200).json(checklist)
+  } catch (error) {
+    res.status(422).json(error)
+  }
 })
 
 module.exports = router
